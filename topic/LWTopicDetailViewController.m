@@ -6,9 +6,11 @@
 //  Copyright (c) 2014 Lukas Welte. All rights reserved.
 //
 
+#import <FacebookSDK/FacebookSDK.h>
 #import "LWTopicDetailViewController.h"
 #import "LWTopic.h"
 #import "LWCategory.h"
+#import "UIImage+RemoteImage.h"
 
 @interface LWTopicDetailViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate>
 @property(weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
@@ -21,6 +23,7 @@
 @property(weak, nonatomic) IBOutlet UIButton *stopTimeButton;
 
 @property(strong, nonatomic) NSDateFormatter *dateFormatter;
+@property(weak, nonatomic) IBOutlet UIImageView *creatorImageView;
 
 @property(nonatomic, strong) NSArray *categories;
 @end
@@ -44,8 +47,30 @@
     return _dateFormatter;
 }
 
+- (void)loadCreatorImage {
+    if (!self.topic.creatorImageURL || self.topic.creatorImageURL.absoluteString.length <= 0) {
+        [FBRequestConnection startWithGraphPath:@"me" parameters:[NSDictionary dictionaryWithObject:@"picture,id" forKey:@"fields"] HTTPMethod:@"GET" completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+            NSLog(@"facebook result: %@", result);
+            if (result && [result isKindOfClass:[NSDictionary class]]) {
+                id urlString = result[@"picture"][@"data"][@"url"];
+                if (urlString && [urlString isKindOfClass:[NSString class]]) {
+                    NSURL *url = [NSURL URLWithString:urlString];
+                    self.topic.creatorImageURL = url;
+                    [self.creatorImageView setImageWithURL:self.topic.creatorImageURL placeholderImage:nil];
+                }
+            }
+        }];
+
+    } else {
+
+        [self.creatorImageView setImageWithURL:self.topic.creatorImageURL placeholderImage:nil];
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    [self loadCreatorImage];
 
     self.topicName.text = self.topic.name;
     self.topicName.delegate = self;

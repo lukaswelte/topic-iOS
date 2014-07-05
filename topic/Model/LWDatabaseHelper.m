@@ -50,6 +50,7 @@
                     "name TEXT NOT NULL,"
                     "startDate DATE,"
                     "endDate DATE,"
+                    "creatorImage TEXT,"
                     "categoryID INTEGER NOT NULL,"
                     "FOREIGN KEY(categoryID) REFERENCES category(id)"
                     ");";

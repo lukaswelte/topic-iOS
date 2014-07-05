@@ -17,10 +17,7 @@
 @property(nonatomic, strong) LWCategory *category;
 @property(nonatomic, strong) NSDate *startDate;
 @property(nonatomic, strong) NSDate *endDate;
-
-- (instancetype)initWithName:(NSString *)name category:(LWCategory *)category startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
-
-+ (instancetype)topicWithName:(NSString *)name category:(LWCategory *)category startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
+@property(nonatomic, strong) NSURL *creatorImageURL;
 
 - (void)uploadToBackend;
 

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		628B764C83CB87A00C194AC9 /* LWBackendSyncController.m in Sources */ = {isa = PBXBuildFile; fileRef = 628B793F005DD07B589924ED /* LWBackendSyncController.m */; };
+		628B7C91EC8040C4AC439F88 /* LWRemoteImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 628B7F054B2BDAF4411B4EC5 /* LWRemoteImageHelper.m */; };
+		801ADFF11968107800FBA8BF /* UIImage+RemoteImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 801ADFF01968107800FBA8BF /* UIImage+RemoteImage.m */; };
 		80496C401965A1CE003F1008 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80496C3F1965A1CE003F1008 /* Foundation.framework */; };
 		80496C421965A1CE003F1008 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80496C411965A1CE003F1008 /* CoreGraphics.framework */; };
 		80496C441965A1CE003F1008 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80496C431965A1CE003F1008 /* UIKit.framework */; };
@@ -57,9 +59,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		628B71BC7E6C517D41B9E4EE /* LWRemoteImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LWRemoteImageHelper.h; path = Model/LWRemoteImageHelper.h; sourceTree = "<group>"; };
 		628B73729843B8647B5C253A /* LWBackendSyncController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LWBackendSyncController.h; path = Model/LWBackendSyncController.h; sourceTree = "<group>"; };
 		628B77644BD29DA1ACA6CB2E /* LWModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LWModel.h; path = Model/LWModel.h; sourceTree = "<group>"; };
 		628B793F005DD07B589924ED /* LWBackendSyncController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LWBackendSyncController.m; path = Model/LWBackendSyncController.m; sourceTree = "<group>"; };
+		628B7F054B2BDAF4411B4EC5 /* LWRemoteImageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LWRemoteImageHelper.m; path = Model/LWRemoteImageHelper.m; sourceTree = "<group>"; };
+		801ADFEF1968107800FBA8BF /* UIImage+RemoteImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+RemoteImage.h"; path = "Model/UIImage+RemoteImage.h"; sourceTree = "<group>"; };
+		801ADFF01968107800FBA8BF /* UIImage+RemoteImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+RemoteImage.m"; path = "Model/UIImage+RemoteImage.m"; sourceTree = "<group>"; };
 		80496C3C1965A1CE003F1008 /* topic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = topic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80496C3F1965A1CE003F1008 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		80496C411965A1CE003F1008 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -145,6 +151,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		801ADFEE1968105F00FBA8BF /* Image Fetching */ = {
+			isa = PBXGroup;
+			children = (
+				628B7F054B2BDAF4411B4EC5 /* LWRemoteImageHelper.m */,
+				628B71BC7E6C517D41B9E4EE /* LWRemoteImageHelper.h */,
+				801ADFEF1968107800FBA8BF /* UIImage+RemoteImage.h */,
+				801ADFF01968107800FBA8BF /* UIImage+RemoteImage.m */,
+			);
+			name = "Image Fetching";
+			sourceTree = "<group>";
+		};
 		80496C331965A1CE003F1008 = {
 			isa = PBXGroup;
 			children = (
@@ -248,6 +265,7 @@
 				628B77644BD29DA1ACA6CB2E /* LWModel.h */,
 				628B73729843B8647B5C253A /* LWBackendSyncController.h */,
 				628B793F005DD07B589924ED /* LWBackendSyncController.m */,
+				801ADFEE1968105F00FBA8BF /* Image Fetching */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -395,6 +413,7 @@
 				80496C991966AC04003F1008 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				80496C761965A23B003F1008 /* LWTopicListController.m in Sources */,
 				80496CB41966BD6B003F1008 /* LWLoginViewController.m in Sources */,
+				801ADFF11968107800FBA8BF /* UIImage+RemoteImage.m in Sources */,
 				80496C9B1966AC04003F1008 /* FMDatabaseAdditions.m in Sources */,
 				80496C9E1966AC04003F1008 /* FMResultSet.m in Sources */,
 				80496C8219669329003F1008 /* LWCategory.m in Sources */,
@@ -404,6 +423,7 @@
 				80496C791965A27E003F1008 /* LWArrayDataSource.m in Sources */,
 				80496C9A1966AC04003F1008 /* FMDatabase.m in Sources */,
 				628B764C83CB87A00C194AC9 /* LWBackendSyncController.m in Sources */,
+				628B7C91EC8040C4AC439F88 /* LWRemoteImageHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

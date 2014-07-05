@@ -18,7 +18,7 @@
 
 @implementation LWTopic
 
-- (instancetype)initWithIdentifier:(NSNumber *)identifier name:(NSString *)name category:(LWCategory *)category startDate:(NSDate *)startDate endDate:(NSDate *)endDate localIdentifier:(NSNumber *)localIdentifier {
+- (instancetype)initWithIdentifier:(NSNumber *)identifier name:(NSString *)name category:(LWCategory *)category startDate:(NSDate *)startDate endDate:(NSDate *)endDate localIdentifier:(NSNumber *)localIdentifier creatorImageURL:(NSURL *)creatorImageURL {
     self = [super init];
     if (self) {
         self.identifier = identifier;
@@ -27,18 +27,10 @@
         self.startDate = startDate;
         self.endDate = endDate;
         self.localIdentifier = localIdentifier;
+        self.creatorImageURL = creatorImageURL;
     }
 
     return self;
-}
-
-
-- (instancetype)initWithName:(NSString *)name category:(LWCategory *)category startDate:(NSDate *)startDate endDate:(NSDate *)endDate {
-    return [self initWithIdentifier:@(-1) name:name category:category startDate:startDate endDate:endDate localIdentifier:@(-1)];
-}
-
-+ (instancetype)topicWithName:(NSString *)name category:(LWCategory *)category startDate:(NSDate *)startDate endDate:(NSDate *)endDate {
-    return [[self alloc] initWithName:name category:category startDate:startDate endDate:endDate];
 }
 
 - (BOOL)saveToDatabase {
@@ -51,7 +43,7 @@
         if (self.identifier && self.identifier.integerValue > 0) {
             FMResultSet *resultSet = [db executeQuery:@"SELECT id FROM topic WHERE id = ?", self.identifier];
             if ([resultSet next]) {
-                successful = [db executeUpdate:@"UPDATE topic SET name = ?, startDate = ?, endDate = ?, categoryID = ? WHERE id = ?", self.name, self.startDate, self.endDate, self.category.identifier, self.identifier];
+                successful = [db executeUpdate:@"UPDATE topic SET name = ?, startDate = ?, endDate = ?, categoryID = ?, creatorImage = ? WHERE id = ?", self.name, self.startDate, self.endDate, self.category.identifier, self.creatorImageURL.absoluteString, self.identifier];
             }
 
         }
@@ -60,13 +52,14 @@
             if (self.localIdentifier && self.localIdentifier.integerValue > 0) {
                 FMResultSet *resultSet = [db executeQuery:@"SELECT id FROM topic WHERE localID = ?", self.localIdentifier];
                 if ([resultSet next]) {
-                    successful = [db executeUpdate:@"UPDATE topic SET id = ?, name = ?, startDate = ?, endDate = ?, categoryID = ? WHERE localID = ?", self.identifier, self.name, self.startDate, self.endDate, self.category.identifier, self.localIdentifier];
+                    successful = [db executeUpdate:@"UPDATE topic SET id = ?, name = ?, startDate = ?, endDate = ?, categoryID = ?, creatorImage = ? WHERE localID = ?", self.identifier, self.name, self.startDate, self.endDate, self.category.identifier, self.creatorImageURL.absoluteString
+                            , self.localIdentifier];
                 }
             }
         }
 
         if (!successful) {
-            successful = [db executeUpdate:@"INSERT INTO topic (id, name, startDate, endDate, categoryID) VALUES (?,?,?,?,?)", self.identifier, self.name, self.startDate, self.endDate, self.category.identifier];
+            successful = [db executeUpdate:@"INSERT INTO topic (id, name, startDate, endDate, categoryID, creatorImage) VALUES (?,?,?,?,?,?)", self.identifier, self.name, self.startDate, self.endDate, self.category.identifier, self.creatorImageURL.absoluteString];
             if (successful) {
                 self.localIdentifier = @(db.lastInsertRowId);
             }
@@ -92,9 +85,15 @@
         NSString *name = dictionary[@"name"];
         NSDate *startDate = [LWBackendSyncController dateFromAPITimeString:dictionary[@"startdate"]];
         NSDate *endDate = [LWBackendSyncController dateFromAPITimeString:dictionary[@"enddate"]];
+        id urlString = dictionary[@"creatorimage"];
+        NSURL *creatorImageURL;
+        if (urlString && [urlString isKindOfClass:[NSString class]]) {
+            creatorImageURL = [NSURL URLWithString:urlString];
+        }
+        
         LWCategory *category = [LWCategory categoryWithIdentifier:dictionary[@"category"]];
 
-        LWTopic *topic = [[LWTopic alloc] initWithIdentifier:identifier name:name category:category startDate:startDate endDate:endDate localIdentifier:@(-1)];
+        LWTopic *topic = [[LWTopic alloc] initWithIdentifier:identifier name:name category:category startDate:startDate endDate:endDate localIdentifier:@(-1) creatorImageURL:creatorImageURL];
         [topic saveToDatabase];
     }
 }
@@ -119,6 +118,10 @@
         [result setObject:self.category.identifier forKey:@"category"];
     }
 
+    if (self.creatorImageURL) {
+        [result setObject:self.creatorImageURL.absoluteString forKey:@"creatorimage"];
+    }
+
     if (self.identifier) {
         [result setObject:self.identifier forKey:@"id"];
     }
@@ -139,9 +142,10 @@
             NSString *name = [resultSet stringForColumn:@"name"];
             NSDate *startDate = [resultSet dateForColumn:@"startDate"];
             NSDate *endDate = [resultSet dateForColumn:@"endDate"];
+            NSURL *creatorImageURL = [NSURL URLWithString:[resultSet stringForColumn:@"creatorImage"]];
             LWCategory *category = [LWCategory categoryWithIdentifier:@([resultSet intForColumn:@"categoryID"])];
 
-            resultTopic = [[LWTopic alloc] initWithIdentifier:identifier name:name category:category startDate:startDate endDate:endDate localIdentifier:localID];
+            resultTopic = [[LWTopic alloc] initWithIdentifier:identifier name:name category:category startDate:startDate endDate:endDate localIdentifier:localID creatorImageURL:creatorImageURL];
         }
         [db close];
     }];
@@ -164,9 +168,10 @@
             NSString *name = [resultSet stringForColumn:@"name"];
             NSDate *startDate = [resultSet dateForColumn:@"startDate"];
             NSDate *endDate = [resultSet dateForColumn:@"endDate"];
+            NSURL *creatorImageURL = [NSURL URLWithString:[resultSet stringForColumn:@"creatorImage"]];
             LWCategory *category = [LWCategory categoryWithIdentifier:@([resultSet intForColumn:@"categoryID"])];
 
-            LWTopic *topic = [[LWTopic alloc] initWithIdentifier:identifier name:name category:category startDate:startDate endDate:endDate localIdentifier:localID];
+            LWTopic *topic = [[LWTopic alloc] initWithIdentifier:identifier name:name category:category startDate:startDate endDate:endDate localIdentifier:localID creatorImageURL:creatorImageURL];
             [fetchedTopics addObject:topic];
         }
 
@@ -191,9 +196,10 @@
             NSString *name = [resultSet stringForColumn:@"name"];
             NSDate *startDate = [resultSet dateForColumn:@"startDate"];
             NSDate *endDate = [resultSet dateForColumn:@"endDate"];
+            NSURL *creatorImageURL = [NSURL URLWithString:[resultSet stringForColumn:@"creatorImage"]];
             LWCategory *category = [LWCategory categoryWithIdentifier:@([resultSet intForColumn:@"categoryID"])];
 
-            LWTopic *topic = [[LWTopic alloc] initWithIdentifier:identifier name:name category:category startDate:startDate endDate:endDate localIdentifier:localID];
+            LWTopic *topic = [[LWTopic alloc] initWithIdentifier:identifier name:name category:category startDate:startDate endDate:endDate localIdentifier:localID creatorImageURL:creatorImageURL];
             [fetchedTopics addObject:topic];
         }
 
