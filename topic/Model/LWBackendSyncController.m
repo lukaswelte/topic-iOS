@@ -131,7 +131,7 @@ static NSString *const kTopicUploadList = @"topicUploadList";
 }
 
 - (NSURL *)topicUpdateURLForTopic:(LWTopic *)topic {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"http://lukaswelte.de/topic/topic/%d", topic.identifier.integerValue]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"http://lukaswelte.de/topic/topic/%ld", (long)topic.identifier.integerValue]];
 }
 
 - (void)setTokenAndStartSync:(NSString *)token {
