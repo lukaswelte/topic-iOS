@@ -338,9 +338,6 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Lukas Welte";
 				TargetAttributes = {
-					80496C3B1965A1CE003F1008 = {
-						DevelopmentTeam = LCLY62U8AM;
-					};
 					80496C5C1965A1CE003F1008 = {
 						TestTargetID = 80496C3B1965A1CE003F1008;
 					};
