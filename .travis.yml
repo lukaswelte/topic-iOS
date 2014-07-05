@@ -1,3 +1,4 @@
 language: objective-c
 xcode_project: topic.xcodeproj
 xcode_scheme: topic
+xcode_sdk: iphonesimulator7.0
